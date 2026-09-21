@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do you want to proceed annually?</title>
+<style>
+:root {
+  --bg: #ffffff; --card-bg: #f7f6f2; --border: #dedad2; --border-selected: #185FA5;
+  --text-primary: #2C2C2A; --text-secondary: #5F5E5A; --accent-bg: #E6F1FB; --accent-text: #0C447C;
+  --badge-bg: #EAF3DE; --badge-text: #27500A; --button-bg: #185FA5; --button-text: #ffffff;
+  --button-disabled: #B4B2A9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1c1c1a; --card-bg: #262623; --border: #444441; --border-selected: #85B7EB;
+    --text-primary: #F1EFE8; --text-secondary: #B4B2A9; --accent-bg: #042C53; --accent-text: #B5D4F4;
+    --badge-bg: #173404; --badge-text: #C0DD97; --button-bg: #85B7EB; --button-text: #042C53;
+    --button-disabled: #444441;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px;
+}
+.wrap { max-width: 480px; width: 100%; }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 8px; text-align: center; }
+.subtitle { font-size: 14px; color: var(--text-secondary); text-align: center; margin: 0 0 24px; }
+.options { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+.option {
+  border: 2px solid var(--border); border-radius: 12px; padding: 18px 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: var(--card-bg); transition: border-color 0.15s;
+}
+.option.selected { border-color: var(--border-selected); background: var(--accent-bg); }
+.option-left { display: flex; flex-direction: column; gap: 4px; }
+.option-title { font-size: 16px; font-weight: 600; }
+.option.selected .option-title { color: var(--accent-text); }
+.badge {
+  display: inline-block; background: var(--badge-bg); color: var(--badge-text); font-size: 12px;
+  font-weight: 600; padding: 2px 8px; border-radius: 999px; margin-left: 8px;
+}
+.option-price { font-size: 20px; font-weight: 700; white-space: nowrap; }
+.option-price .period { font-size: 13px; font-weight: 400; color: var(--text-secondary); }
+.option-strike { font-size: 13px; color: var(--text-secondary); text-decoration: line-through; }
+.continue-btn {
+  width: 100%; padding: 14px; border-radius: 10px; border: none; font-size: 16px; font-weight: 600;
+  cursor: pointer; background: var(--button-bg); color: var(--button-text);
+}
+.continue-btn:disabled { background: var(--button-disabled); cursor: not-allowed; }
+.error { text-align: center; color: var(--text-secondary); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Do you want to pay annually?</h1>
+  <p class="subtitle" id="subtitle"></p>
+  <div class="options" id="options"></div>
+  <button class="continue-btn" id="continueBtn" disabled>Choose an option to continue</button>
+</div>
+
+<script>
+// Llegeix les dades des dels paràmetres de la URL, que el script de sync
+// li passa quan genera aquest link per a un deal concret.
+const params = new URLSearchParams(window.location.search);
+
+const annualUrl = params.get("yurl");
+const annualAmount = params.get("yamt");
+const originalUrl = params.get("nurl");
+const originalAmount = params.get("namt");
+const originalPeriod = params.get("nperiod") || "/month"; // ex: "/month", "/every 3 months"
+const strikeAmount = params.get("ystrike"); // preu anual sense descompte (opcional)
+const discountPct = params.get("disc");     // ex: "10"
+
+const wrap = document.querySelector(".wrap");
+
+if (!annualUrl || !originalUrl || !annualAmount || !originalAmount) {
+  wrap.innerHTML = `<p class="error">This link is missing information. Please contact us for a new payment link.</p>`;
+} else {
+  document.getElementById("subtitle").textContent = discountPct
+    ? `Save ${discountPct}% by paying once a year instead of your current plan.`
+    : `Choose how you'd like to pay.`;
+
+  const LINKS = { yes: annualUrl, no: originalUrl };
+
+  const choices = [
+    {
+      id: "yes", title: "Yes, pay annually",
+      price: `\u20ac${annualAmount}`, period: "/year",
+      strike: strikeAmount ? `\u20ac${strikeAmount}/year` : null,
+      badge: discountPct ? `Save ${discountPct}%` : null,
+    },
+    {
+      id: "no", title: "No, keep the current plan",
+      price: `\u20ac${originalAmount}`, period: originalPeriod,
+      strike: null, badge: null,
+    },
+  ];
+
+  let selected = null;
+
+  function render() {
+    const container = document.getElementById("options");
+    container.innerHTML = "";
+    choices.forEach(choice => {
+      const el = document.createElement("div");
+      el.className = "option" + (selected === choice.id ? " selected" : "");
+      el.onclick = () => { selected = choice.id; render(); };
+      el.innerHTML = `
+        <div class="option-left">
+          <div class="option-title">${choice.title}${choice.badge ? `<span class="badge">${choice.badge}</span>` : ""}</div>
+          ${choice.strike ? `<div class="option-strike">${choice.strike}</div>` : ""}
+        </div>
+        <div class="option-price">${choice.price}<span class="period">${choice.period}</span></div>
+      `;
+      container.appendChild(el);
+    });
+
+    const btn = document.getElementById("continueBtn");
+    if (selected) {
+      btn.disabled = false;
+      btn.textContent = selected === "yes" ? "Continue — pay annually" : "Continue with current plan";
+    } else {
+      btn.disabled = true;
+      btn.textContent = "Choose an option to continue";
+    }
+  }
+
+  document.getElementById("continueBtn").addEventListener("click", () => {
+    if (!selected) return;
+    window.location.href = LINKS[selected];
+  });
+
+  render();
+}
+</script>
+</body>
+</html>
