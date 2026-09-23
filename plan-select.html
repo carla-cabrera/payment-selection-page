@@ -1,119 +1,251 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Choose your plan</title>
+<title>Your REVER plan</title>
 <style>
-:root {
-  --bg: #f7f8fa;
-  --card-bg: #ffffff;
-  --border: #e3e5e9;
-  --border-selected: #0074d4;
-  --text-primary: #14181f;
-  --text-secondary: #6b7280;
-  --accent: #0074d4;
-  --badge-bg: #0074d4;
-  --badge-text: #ffffff;
-  --button-bg: #14181f;
-  --button-text: #ffffff;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0b0d12;
-    --card-bg: #171a21;
-    --border: #2a2e38;
-    --text-primary: #f5f6f8;
-    --text-secondary: #9aa0ac;
-    --button-bg: #ffffff;
-    --button-text: #0b0d12;
+  :root {
+    --bg: #fbfbfd;
+    --surface: #ffffff;
+    --border: #d2d2d7;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --accent: #0071e3;
+    --button-bg: #1d1d1f;
+    --button-text: #ffffff;
+    --track-bg: #e8e8ed;
   }
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0; background: var(--bg); color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 64px 24px;
-}
-.logo { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; margin-bottom: 32px; }
-.logo img { width: 100%; height: 100%; object-fit: cover; }
-h1 { font-size: 32px; font-weight: 700; margin: 0 0 8px; text-align: center; letter-spacing: -0.02em; }
-.subtitle { font-size: 16px; color: var(--text-secondary); margin: 0 0 48px; text-align: center; }
-.cards { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 720px; }
-.card {
-  background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
-  padding: 32px 28px; width: 300px; display: flex; flex-direction: column; gap: 16px;
-  position: relative; transition: border-color 0.15s, transform 0.15s;
-}
-.card.highlight { border-color: var(--border-selected); border-width: 2px; }
-.badge {
-  position: absolute; top: -12px; left: 28px; background: var(--badge-bg); color: var(--badge-text);
-  font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; letter-spacing: 0.02em;
-}
-.card-title { font-size: 15px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
-.price-row { display: flex; align-items: baseline; gap: 6px; }
-.price { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
-.period { font-size: 15px; color: var(--text-secondary); }
-.strike { font-size: 14px; color: var(--text-secondary); text-decoration: line-through; }
-.card-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; min-height: 42px; }
-.select-btn {
-  margin-top: 8px; width: 100%; padding: 14px; border-radius: 10px; border: none;
-  font-size: 15px; font-weight: 600; cursor: pointer; background: var(--button-bg); color: var(--button-text);
-}
-.card:not(.highlight) .select-btn { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
-.error { color: var(--text-secondary); font-size: 15px; text-align: center; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #000000;
+      --surface: #1c1c1e;
+      --border: #38383a;
+      --text: #f5f5f7;
+      --text-secondary: #98989d;
+      --accent: #2997ff;
+      --button-bg: #f5f5f7;
+      --button-text: #1d1d1f;
+      --track-bg: #2c2c2e;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 88px 24px 64px;
+  }
+  main { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
+
+  .logo { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; margin-bottom: 28px; }
+  .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  h1 {
+    font-size: 30px; font-weight: 600; letter-spacing: -0.015em;
+    margin: 0 0 8px; text-align: center; line-height: 1.15;
+  }
+  .subtitle {
+    font-size: 16px; line-height: 1.5; color: var(--text-secondary);
+    margin: 0 0 40px; text-align: center; max-width: 320px;
+  }
+
+  /* Segmented control */
+  .switcher {
+    position: relative; display: flex; width: 100%;
+    background: var(--track-bg); border-radius: 12px; padding: 3px;
+    margin-bottom: 40px;
+  }
+  .switcher-thumb {
+    position: absolute; top: 3px; bottom: 3px; left: 3px;
+    width: calc(50% - 3px); background: var(--surface);
+    border-radius: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  [data-selected="current"] .switcher-thumb { transform: translateX(100%); }
+  .switcher button {
+    position: relative; flex: 1; z-index: 1; border: none; background: transparent;
+    font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    padding: 9px 4px; border-radius: 9px; cursor: pointer;
+    font-family: inherit; transition: color 0.25s;
+  }
+  .switcher button[aria-selected="true"] { color: var(--text); }
+  .switcher button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Price block */
+  .price-block { text-align: center; min-height: 148px; }
+  .price-row {
+    display: flex; align-items: baseline; justify-content: center; gap: 8px;
+  }
+  .price {
+    font-size: 56px; font-weight: 300; letter-spacing: -0.02em; line-height: 1;
+  }
+  .price-period { font-size: 17px; color: var(--text-secondary); }
+  .price-note {
+    font-size: 14px; color: var(--text-secondary); margin-top: 10px; line-height: 1.5;
+  }
+  .price-note strong { color: var(--text); font-weight: 500; }
+
+  hr {
+    width: 100%; border: none; border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  .plan-desc {
+    font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+    text-align: center; margin: 0 0 28px;
+  }
+
+  .continue-btn {
+    width: 100%; padding: 14px; border: none; border-radius: 980px;
+    background: var(--button-bg); color: var(--button-text);
+    font-size: 16px; font-weight: 500; font-family: inherit; cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .continue-btn:hover { opacity: 0.85; }
+  .continue-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .footnote {
+    font-size: 12px; color: var(--text-secondary); margin-top: 22px; text-align: center;
+  }
+
+  .error { font-size: 15px; color: var(--text-secondary); text-align: center; margin-top: 40px; }
+
+  .fade { transition: opacity 0.22s ease; }
+  .fade.out { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .switcher-thumb, .continue-btn, .fade { transition: none !important; }
+  }
+
+  @media (max-width: 420px) {
+    body { padding-top: 56px; }
+    h1 { font-size: 26px; }
+    .price { font-size: 46px; }
+  }
 </style>
 </head>
 <body>
-<div class="logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAASdElEQVR42u2dWWxc13mAv3PuMgsXkRRFiRIpiaxsyZbkRV4kxQ3QurYQ1AiSIiiaIA7SJCichwZNjRSNiwItkoeiKJAabQPXbVo4gd2ktZGmaVLEBuK2sZMosuS1cGzHsnZroxaK5HBm7r3n9OHe4YwUy9YyZ+bey/MDo+WFHPJ+85/v/Gf5xfIHtQIENmx0PkJpfwc2uhkWQBsWQBsWQBs2LIA2LIA2bFgAbVgAbdiwANqwANqwYQG0YQG0YcMCaMMCaMOGBdCGBdCGDQugDQugDRsWQBsWQBs2rijcxfuja9ApeBti4Q8L4OLK/aL7z123vFSU/EOAECCkBTC3IUDPz6HDavywu/QmhHTBKyA8H1FwEA5oBYSgwwTKnMO4SDOg4szXP0H49ivgl5On3uHMJ0BID+GXkKUB5JJR3GWTuKOb8FZtxhmeQJYddAC6ruP3KB0LYLa1TyE8SXjiMMGh5yEKIKh27+3oGKxIRaBCajqKs115AG/5evxrf53ipt/EG98EjoOuJlkxRyAuMgA1woPg8AtQnYHyYDLMpcAJhEgmIxqikODg8wR7f8rcf/8t/uQ2yts/SWHTPYiig66oZGgWFsAsRn3fz1qG3TTMhi94D0KC3wOFPlAR9df/h/prT+NNbKXnrvspbr4r9sQg+9lwcdUBpURVNcGhPeD6nXe/ywJSgQrjf5f6oTxAcGA3Z7/2Mc4+ch/RuaPIspPMni2A2fA/VxCdOkR48k1wiykG8MI5UxS/Cr1Q6qe659849dc7mH/xB8ieZOqstQUwM/5XOQOOm8kPESqCnqWoymnO/vO9zHz/K4iiBKEzCeEiGoLjh1Pf3/C/DAu8CsEtQLGf2e/9OdPf/ALCkyCzB+HiAVA6sf8dfD5+eFkZft8tG2oN/SPMP/swZx/7HMKVILI1HC8OABv+d/pw9vzvvbJ6FEL/Cqo7H2H6iQcQRQeILICp8z+34X+ns+l/7xZRAH3Lmf/frzL71EPIHjczs+NFMgRrEK31vxzuPlER9C5l9vt/RvWVZxAZKdEsDgAb/ndoTz7876KTLAGOy/Tjf4A6exrhitT7YP4BbPW/Ew3/07n9WfHLqKm3OPe9LyN8mfoP2yIAsOF/L7b4n87vzxuFUB6i+txjVF/9CaKU7qF4EQzBif/t35lf/7swkk0Ks0/9BYQq1ZsW8g+gdFA1TXAwz/73DhOSYh/B3h8z//KTiJJMbRbMN4AL679HiIz7n3iXV3fUA+lSefZhCHVqs2DOAWzW/7Rp/9PRRV7JsC8dkG6yfUp05MNHoZdg305qe/fE68U6sgB2x/9M1v/i7CK8EsIrJn+XFv6P44IKYH4aZqfiv3UUw2g6KwkJYY3q8/8aHytJ4dwr3xtSTfufdGB+mr7f+itKWz6Aqly4QVRDFKBr54imjxIe/zn1/bsI9u9GzxyPN5y6vjk/0xH4ZWqvP010dhZR6gWlUzURyy+AjfMfJw8TnfyFGf9TIRT7KWy4G7lkFFm6yJgiwZObEWIHOoJo6hDzex5n7pmvoWdPQGkg2XxqwAPdIur0Aer7d1G88c54O3+KdlHndwhu+N+RF9FzBvxPSAiquCPrcAZXoucVOlLoQF/wUuiaQlci1FyErimcwXH67rmf4T98En/9XXF90hQUQoAKqb/5o2TET9c4nGMHjP0vMLX+m/iVt/pWZEnG2UbI5mEh0XLAXMhkEuKAkOhQo2ZCnMFxhu77JoUbPwKVs2Yg1Aocn+DgHlSd1J0hyS+Aif/VjdX/YuD8ie2Xn1REvGar6xEoGPj43+GO3QC1ufYfQtca3ALhqX2oc6fASdf6cD4BXFj/fTvxv0Kbf+kCohDRsxRvfEt8i8GVzGilgw4UolSg754vGyqS6xj2udNEpw8gnHQNwzkFsLn+G/uf12b/ExBUcUauwRlaiQ71lWcux0HPKwobfhVvYhvUZtufBYWEsEp05lD8xG0G7JD/7d+ZFF8N+F9Uw19zG7Igrr6MohXCh8J1OyCsG7gLRoBSRNPHki9tAcyB/zn4E9uTZCKuGhAdgTd2k7nzyoJ4NShlxej8AdjqfydM+V+A6B2OgQm4+owlBCiQ/SuMXpakg0r6coX1vyvzP3f5BpzBFYn/tWGI18TLd45vbNlQK9X8EFkATfvfzwz6Xx1v7W0In/Yu8KsQbeI9N9666zd/RxbAjPpfss2pff7XfBKqcgaCeZAGdg5oEMX+1O3HzReAC/53lOjEG4b8r47oG8FbdSO6Hf7X0AYHoqm34vsKTdyIKgRO34idhJj2P85b/zXgf2EVd8V1OAPDbd/oWT+4x4z/aQWOhzM4ngwI1gGN+Z9YWP815H9hgL92a3v9T0pUJaC+9xnwSm3WhqROWezHWToRX5ogLICG/W83OAbqaVqB6+Gv3Zqw14YHqSJEAepv/pTo2M/bD6CItcEZGMMZGE0+l9ICaKb80vC/X4BXNFP/61+Bu+qGZP1Xtu1rz/3kH5MdNe3O2iLetbNqE6LkQpSubfk5AlC1+N+p9vuflBDM463YiLNksD3HHVWEKDtU/+9H1F/9ART7DeyOjne/+JN32P2AHfE/U/W/ZAeMN7EV4XH1w6TW4Ar0XIWZ7/5JfEbERKgAyoP4k3e0b9ZuAbyY/yUzSVP+5xXa439aAwrhS6Yf/yOiY6/Gl5K3+z0LCfUK3vgW3JHV6EBbAI3635mjRMffaL//JSIv+0fxRjddXSZRCoRGlh3OfftLVHc/BuUhM2dChIQooLj5g0nWtscyjfpfeNiQ/zXOf6zchFzSD9GV+F98maQoSIQrOPutB6g8/RXoWWoGPuLJh1iykuKme+Lt+MKxAJr0v7ph//MntiHcy/Q/rRd6vsk+l/DkPk4/9NvMP/NQAp+hrCQdqM1Q3PxB3GXDEESpvB0hH8cypYOqQ2Cy/ucVL9H/kovCdXz+VngSUXCIZuaYffIRZn/4N+jKKegZNpT5GkN9fGS0vP0zV35kwAJ4if7nCcJTRwlPGPK/sIYcWIW74vrY/6RswqZUc7gXEqREeALhxtxGU0eovvQdKjsfJTr6GpT6oLTELHzShblTFLd+An/Nte9wYN4C2Gb/cwiPvISePQXlgfYOa4n/eatuQPb3oKuqOQGRAlF0FpKLVqDnA8KT+6kfeI7aaz+kvvfH6Olj8UbT3qWxIhi9qUqAChClJfTe+Xl0pFN9PVsOhuAO+J+K8Ca2xf18dTIBkQJdOUftlWeIZqeIzhwimtpLeHIv0emD8R0wQkKhB3qHW1pvGQ7HgZnTlHY8gDc+iZpNdz+57APY8L8Dpvwvvl/FX3N7c/lNRciSy9yu/+Lco/eCPxDDJZz4TIdbgJ6hZtmlE+A1snVtDmd0I72/8TnUvEp9s+tsA7jgf8fM+t/gOO6KDUn9T4AWoJOs6w+0zGYbExDVvQshVUj/h/8S2duDrkQtvprS/JF9/4PwyIvouSlj9T9v7EZkb6m5kC8d1HwY9x1xvLhPhwpj6Lp1A6vjwdwU5V/7PMXN70/gS38r14zXAVv8TxnyP63i+p9slliEB+HJfUSn9qXj2l/pwtxpvPV303/PF1Hz6c98+QBQGPY/FYHfi7fm9uY+Oq3iU3eHnof5c93PMtKB2ixyeJKBex+K/6+7eDXwogFwYf3XrP85Q6txl1/T9D9a/C8FEzCCKqLYx+CnvoEzOIKup3/ikRMAFXjE9T9T/hdW8cZvRvYUEv8TTf879AJ4he7ds9KAz/EY/NSj+KuvQ2do6M3BEJz43z6z/udNbGtu5NQq9r+p/Yn/danrpnShXkG4BQY+8y8UNmxFzYWZmHTkB0BheP1XhVDsw199W7P+d57/TXfngTseVKeRPUsZvO8Jite9DzUbZrYDaDbf9YL/HSc8/roB/4u33zsj1+CO/EoLgEnX9X07u/CBE3Ghe+Yk7uotDHzyn3BXTMQrHRluP5vNDJj4n7HzH8n9L97Yzciyd379rxJ13v9k0v93doribR9j6Pe/i7tsIq71OQ5Zjox+dFrrf6GxkoM/uT350on/+ZLg7Q76X+N+6coZRHmQvt95kPL7fxcdgK6pTDpfPgAUDtp0/a+0BG/1rRf4n4x7Ds9Px2u9ppbbGsNtfQ6CGv7GD9D/oS/hja1DzTU6L+VjL3H2ADzP/94w43/1Cs7o9bjDE83zH8n3CPYZrP81Ml5QgVoFZ+VGeu++n9ItH4k/F7NRLrJexgFU4DkEjfpfaUmb9//FBWh//BZk2UHNRQstFlQlon74BQOXHiVRPQcqwlmxnvL7Pk15673I3jKqohYcNG+RwSG4M/7nTW47D/oF/5t6K8m67b/2zV9/J8WbPkTxxg/j9Peg5ml+AHIa2RMJ4/4Xxge5x29p2X5luP6XrLoUNuygd8fHEU4JNRMmdxHmF77sAdjqfydM1f+quMvW4Qyvbmm/EGfZYL+h+p9W4JWZ+fcvcO7bX0X2yORb5r+7e8YATOp/b7+MnjW1/lvHW30LsiiTA0ck678R9UMG/Q+gPMjsf/4pM0/+PbLX7dxOagvgZfrfPlP+Fx/g8Sdb2m8trP8eMOd/je/dgPA/Hlg0EGYLwIb/HXzOgP8l7bfKQ3hjLe23Orn+q3UM4iKCMDsANvzv7AlD9b/4+l1n+bU4S1e9g//t6tjPuZggzBCAjfXfl9CzJw35Xw1/9QXttxyHaLZOff9O8Eud2X61iCDM0BBsuv6XtN+a3NZsv6A1CA1RFR0G8eGjTl3ws0ggzA6ARut/zfZb7tjNzfZbQkCkkT39DH36G8glY1CbMXeZ5CKEMBsAnud/r5vxv6CKu3z9L7ffEhJdU7grr2Hos48j+0e7C+FTD+cKwowA2PC/l835X1THW3M78p3aL0iJrkS4o+sY+uwT3YXwO1/MFYQZGYI74H/SxZ/YdvH2W45jIVy0AAoHHRj0v/AS22+lFcJuH4zPNYAL678nCY+/1v6t8K3ttwaXvXf7rRRCKHyZWQgzAGBj/Tep/8WS1l7/CwP8NbdfevutVEH4x9ReexZRlN27ECnfQ3Bj/XdXcgWagUZ+rhf73+W0X0gDhFpBaRDZuwwUqb6IMrsANvzv4HPx7NdE/a9vBe7KK2i/1U0IF7aOTeIuvzaVTWiyD+B5/vd6chKt3e23qnij1+MMXGH7rW5B2OgBN3YzsiQyOfxmAMCW/X8zJ+IZMO1vQOitvcr2W13MhN7EtmYpyQJoxv+CRv3PiP/5+BNtaL/VaQhVCKUBvPEtbe7caQH8Jf+rH9jdfv9rtN9ashJvdHN7HKpTEAoJQQ1neBJ3eE1m/S/dACbdJKOzU3H9zzV0/uOq2m91CcKFo6M3I0tOZv0v5QDGW+GDIyb9L8Rfu/Xy22+lJBNm3f9SPgTrOEmZ9D+viNeO9qudhjAn/pduAJP9f/UDz5nxv6T9lje68YL2WymHMEf+l14AO+F/YRVv1WZkX0/sf6bO4LYbwhz5X4oBTPzv7ZfRMwb2/zXab62N228ZX8g3kAnz4H8pHoIb9b9doIL2DzE6Aq/cbL/aiSGsXRA2ro7Lgf+lF8CF+p8p/6sjB8fOb7/VibhaCJPSUV78L50AtvrfMXP1P29Vo/2WQf9rN4QL/rclF/6XUgAb/vdKUv8z4H86wp/YniSPLmzkvMpMmBf/S+kQ3FL/iwz4n4rA78Fbe1vn/K9dEOao/pdeAFvrf66Z+p8ztAZ35NrO+t/VQrhQ/5vIjf+lD8AF/ztlzv/CKt7YTcjelvZb3YxLhTCH/pdCAJObqBb2/5nwP4U3sb3ZfisNcRmZ0Fu7NTf+l8IhWCOcpP5nxP9CKPThr7k1fQ71XhAutI64JTf+lz4AjfpffPuVs3QCd2Rd8/6/NMXFIHS83NX/0gdgw/+mzyT3P5eThi2yPS/pxNdvjLe230rhKbJ3grA+ByrKzfpva6SnTYNWCM8hOLQbPfUWFPshrLbxoxZ3HvIntjXbb6U1LoDw9D98FHXsFfzJO3Llf+kCMMlH0fRR3LGboDRIPE626yvHkPsT27IxhDUgXLmOod/7Fme+9lHc0Y3drV2aeObLH9QdXou6RDHQhgjXGUsgSiGKkujUCUSxD+GX8pQAw3R2SjK1OpbFByfj+wnlwEj8e8kPfGksw9i4+Axe5w4+C2CmIMxn1yQLoA0LoA0LoA0bFkAbFkAbNiyANiyANmxYAG1YAG3YsADasADasGEBtGEBtGHDAmjDAmjDhgXQhgXQhg0LoA0LoA0bFkAbFkAbNiyANiyANmxYAG1YAG3YsADaSG+4CIT9NdjoSmiEi6aOthDa6EIIwv8Hzi9ArNd6PYYAAAAASUVORK5CYII=" alt="REVER"></div>
-<h1>Choose your plan</h1>
-<p class="subtitle">Pick the option that works best for you.</p>
-<div class="cards" id="cards"></div>
+<main>
+  <div class="logo"><img src="data:image/png;base64,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" alt="REVER"></div>
+
+  <div id="content">
+    <h1>Your REVER plan</h1>
+    <p class="subtitle" id="subtitle">Choose how you'd like to pay.</p>
+
+    <div class="switcher" id="switcher" data-selected="annual">
+      <div class="switcher-thumb"></div>
+      <button id="btn-annual" role="tab" aria-selected="true">Pay annually</button>
+      <button id="btn-current" role="tab" aria-selected="false">Current plan</button>
+    </div>
+
+    <div class="price-block fade" id="priceBlock">
+      <div class="price-row">
+        <span class="price" id="price">—</span>
+        <span class="price-period" id="pricePeriod"></span>
+      </div>
+      <p class="price-note" id="priceNote"></p>
+    </div>
+
+    <hr>
+
+    <p class="plan-desc" id="planDesc"></p>
+
+    <button class="continue-btn" id="continueBtn"></button>
+    <p class="footnote">Secure checkout by Stripe.</p>
+  </div>
+
+  <p class="error" id="errorMsg" style="display:none;">This link is missing information. Please contact us for a new payment link.</p>
+</main>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const annualUrl = params.get("yurl");
-const annualAmount = params.get("yamt");
-const originalUrl = params.get("nurl");
-const originalAmount = params.get("namt");
-const originalPeriod = params.get("nperiod") || "/month";
-const strikeAmount = params.get("ystrike");
-const discountPct = params.get("disc");
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const data = {
+    annualUrl: params.get("yurl"),
+    annualAmount: params.get("yamt"),
+    strikeAmount: params.get("ystrike"),
+    discountPct: params.get("disc"),
+    originalUrl: params.get("nurl"),
+    originalAmount: params.get("namt"),
+    originalPeriod: params.get("nperiod") || "/month",
+  };
 
-const cardsEl = document.getElementById("cards");
+  if (!data.annualUrl || !data.originalUrl || !data.annualAmount || !data.originalAmount) {
+    document.getElementById("content").style.display = "none";
+    document.getElementById("errorMsg").style.display = "block";
+    return;
+  }
 
-if (!annualUrl || !originalUrl || !annualAmount || !originalAmount) {
-  cardsEl.innerHTML = `<p class="error">This link is missing information. Please contact us for a new payment link.</p>`;
-} else {
-  const plans = [
-    {
-      title: "Annual", price: annualAmount, period: "/year", strike: strikeAmount,
-      desc: discountPct ? `Save ${discountPct}% compared to your current plan.` : "Billed once a year.",
-      badge: discountPct ? `Save ${discountPct}%` : null,
-      url: annualUrl, highlight: true, cta: "Choose annual",
+  const periodLabel = data.originalPeriod.replace(/^\//, "per ").replace("every ", "every ");
+
+  const plans = {
+    annual: {
+      price: data.annualAmount,
+      period: "per year",
+      note: data.discountPct
+        ? `Billed as <strong>€${data.annualAmount}</strong> once a year — that's ${data.discountPct}% less than paying ${periodLabel}.`
+        : "Billed once a year.",
+      desc: "Same REVER plan and features, billed annually instead of " + periodLabel.replace("per ", "") + ".",
+      cta: "Continue with the annual plan",
+      url: data.annualUrl,
     },
-    {
-      title: "Current plan", price: originalAmount, period: originalPeriod, strike: null,
-      desc: "Keep paying as originally agreed, no changes.",
-      badge: null, url: originalUrl, highlight: false, cta: "Keep this plan",
+    current: {
+      price: data.originalAmount,
+      period: periodLabel,
+      note: "No changes — keep paying as originally agreed.",
+      desc: "Your REVER plan continues exactly as it is today.",
+      cta: "Continue with your current plan",
+      url: data.originalUrl,
     },
-  ];
+  };
 
-  cardsEl.innerHTML = plans.map(p => `
-    <div class="card ${p.highlight ? "highlight" : ""}">
-      ${p.badge ? `<div class="badge">${p.badge}</div>` : ""}
-      <div class="card-title">${p.title}</div>
-      <div>
-        <div class="price-row"><span class="price">\u20ac${p.price}</span><span class="period">${p.period}</span></div>
-        ${p.strike ? `<div class="strike">\u20ac${p.strike}${p.period}</div>` : ""}
-      </div>
-      <div class="card-desc">${p.desc}</div>
-      <button class="select-btn" onclick="window.location.href='${p.url}'">${p.cta}</button>
-    </div>
-  `).join("");
-}
+  const switcherEl = document.getElementById("switcher");
+  const btnAnnual = document.getElementById("btn-annual");
+  const btnCurrent = document.getElementById("btn-current");
+  const priceBlock = document.getElementById("priceBlock");
+  const priceEl = document.getElementById("price");
+  const periodEl = document.getElementById("pricePeriod");
+  const noteEl = document.getElementById("priceNote");
+  const descEl = document.getElementById("planDesc");
+  const continueBtn = document.getElementById("continueBtn");
+
+  let current = "annual";
+
+  function render(key) {
+    const p = plans[key];
+    priceEl.textContent = "€" + p.price;
+    periodEl.textContent = p.period;
+    noteEl.innerHTML = p.note;
+    descEl.textContent = p.desc;
+    continueBtn.textContent = p.cta;
+    continueBtn.onclick = function () { window.location.href = p.url; };
+  }
+
+  function select(key) {
+    if (key === current) return;
+    current = key;
+    switcherEl.dataset.selected = key;
+    btnAnnual.setAttribute("aria-selected", key === "annual");
+    btnCurrent.setAttribute("aria-selected", key === "current");
+
+    priceBlock.classList.add("out");
+    setTimeout(function () {
+      render(key);
+      priceBlock.classList.remove("out");
+    }, 150);
+  }
+
+  btnAnnual.addEventListener("click", function () { select("annual"); });
+  btnCurrent.addEventListener("click", function () { select("current"); });
+
+  render("annual");
+})();
 </script>
 </body>
 </html>
